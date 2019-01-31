@@ -1,0 +1,460 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"asset",
+				"assetName"
+			],
+			[
+				"questio",
+				"question_id"
+			],
+			[
+				"Term",
+				"terminateEngine"
+			],
+			[
+				"Aria",
+				"AriaItem"
+			],
+			[
+				"body",
+				"body_container"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "# -*- coding: utf-8 -*-\n\n# FOGLAMP_BEGIN\n# See: http://foglamp.readthedocs.io/\n# FOGLAMP_END\n\n\"\"\" Module for Sinusoid poll mode plugin \"\"\"\n\nimport copy\nimport uuid\nimport logging\n\nfrom foglamp.common import logger\nfrom foglamp.plugins.common import utils\nfrom foglamp.services.south import exceptions\n\n__author__ = \"Ashish Jabble\"\n__copyright__ = \"Copyright (c) 2018 Dianomic Systems\"\n__license__ = \"Apache 2.0\"\n__version__ = \"${VERSION}\"\n\n\n_DEFAULT_CONFIG = {\n    'plugin': {\n        'description': 'Sinusoid Poll Plugin which implements sine wave with data points',\n        'type': 'string',\n        'default': 'sinusoid',\n        'readonly': 'true'\n    },\n    'assetName': {\n        'description': 'Name of Asset',\n        'type': 'string',\n        'default': 'sinusoid',\n        'displayName': 'Asset name'\n    }\n}\n\n_LOGGER = logger.setup(__name__, level=logging.INFO)\nindex = -1\nsine = [\n        0.0,\n        0.104528463,\n        0.207911691,\n        0.309016994,\n        0.406736643,\n        0.5,\n        0.587785252,\n        0.669130606,\n        0.743144825,\n        0.809016994,\n        0.866025404,\n        0.913545458,\n        0.951056516,\n        0.978147601,\n        0.994521895,\n        1.0,\n        0.994521895,\n        0.978147601,\n        0.951056516,\n        0.913545458,\n        0.866025404,\n        0.809016994,\n        0.743144825,\n        0.669130606,\n        0.587785252,\n        0.5,\n        0.406736643,\n        0.309016994,\n        0.207911691,\n        0.104528463,\n        1.22515E-16,\n        -0.104528463,\n        -0.207911691,\n        -0.309016994,\n        -0.406736643,\n        -0.5,\n        -0.587785252,\n        -0.669130606,\n        -0.743144825,\n        -0.809016994,\n        -0.866025404,\n        -0.913545458,\n        -0.951056516,\n        -0.978147601,\n        -0.994521895,\n        -1.0,\n        -0.994521895,\n        -0.978147601,\n        -0.951056516,\n        -0.913545458,\n        -0.866025404,\n        -0.809016994,\n        -0.743144825,\n        -0.669130606,\n        -0.587785252,\n        -0.5,\n        -0.406736643,\n        -0.309016994,\n        -0.207911691,\n        -0.104528463\n    ]\n\n\ndef generate_data():\n    global index\n    while index >= -1:\n        # index exceeds, reset to default\n        if index >= 59:\n            index = -1\n        index += 1\n        yield sine[index]\n\n\ndef plugin_info():\n    \"\"\" Returns information about the plugin.\n    Args:\n    Returns:\n        dict: plugin information\n    Raises:\n    \"\"\"\n    return {\n        'name': 'Sinusoid Poll plugin',\n        'version': '2.0.0',\n        'mode': 'poll',\n        'type': 'south',\n        'interface': '1.0',\n        'config': _DEFAULT_CONFIG\n    }\n\n\ndef plugin_init(config):\n    \"\"\" Initialise the plugin.\n    Args:\n        config: JSON configuration document for the South plugin configuration category\n    Returns:\n        data: JSON object to be used in future calls to the plugin\n    Raises:\n    \"\"\"\n    data = copy.deepcopy(config)\n    return data\n\n\ndef plugin_poll(handle):\n    \"\"\" Extracts data from the sensor and returns it in a JSON document as a Python dict.\n    Available for poll mode only.\n    Args:\n        handle: handle returned by the plugin initialisation call\n    Returns:\n        returns a sensor reading in a JSON document, as a Python dict, if it is available\n        None - If no reading is available\n    Raises:\n        TimeoutError\n    \"\"\"\n    try:\n        time_stamp = utils.local_timestamp()\n        data = {\n            'asset':  handle['assetName']['value'],\n            'timestamp': time_stamp,\n            'key': str(uuid.uuid4()),\n            'readings': {\n                \"sinusoid\": next(generate_data()),\n                \"xyz\": 123\n\n            }\n        }\n    except (Exception, RuntimeError) as ex:\n        _LOGGER.exception(\"Sinusoid exception: {}\".format(str(ex)))\n        raise exceptions.DataRetrievalError(ex)\n    else:\n        return data\n\n\ndef plugin_reconfigure(handle, new_config):\n    \"\"\" Reconfigures the plugin\n\n    Args:\n        handle: handle returned by the plugin initialisation call\n        new_config: JSON object representing the new configuration category for the category\n    Returns:\n        new_handle: new handle to be used in the future calls\n    \"\"\"\n    _LOGGER.info(\"Old config for sinusoid plugin {} \\n new config {}\".format(handle, new_config))\n    new_handle = copy.deepcopy(new_config)\n    return new_handle\n\n\ndef plugin_shutdown(handle):\n    \"\"\" Shutdowns the plugin doing required cleanup, to be called prior to the South plugin service being shut down.\n\n    Args:\n        handle: handle returned by the plugin initialisation call\n    Returns:\n        plugin shutdown\n    \"\"\"\n    _LOGGER.info('sinusoid plugin shut down.')\n",
+			"file": "python/foglamp/plugins/south/sinusoid/sinusoid.py",
+			"file_size": 4784,
+			"file_write_time": 131915329062479101,
+			"settings":
+			{
+				"buffer_size": 4715,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 135.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"gitpush",
+				"Git: Push"
+			],
+			[
+				"gitcomm",
+				"Git: Commit"
+			],
+			[
+				"gitadd",
+				"Git: Add..."
+			],
+			[
+				"git",
+				"Git: Status"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"package",
+				"Package Control: Remove Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"package control",
+				"Package Control: Discover Packages"
+			],
+			[
+				"git push",
+				"Git: Push"
+			],
+			[
+				"gitbla",
+				"Git: Blame"
+			],
+			[
+				"gitpus",
+				"Git: Push"
+			],
+			[
+				"gitco",
+				"Git: Commit"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Discover Packages"
+			]
+		],
+		"width": 394.0
+	},
+	"console":
+	{
+		"height": 427.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": true,
+		"show_open_files": false,
+		"show_tabs": true,
+		"side_bar_visible": true,
+		"status_bar_visible": true
+	},
+	"expanded_folders":
+	[
+		"/D/Users/Bill/Documents/Dianomic/dev/foglamp-south-sinusoid",
+		"/D/Users/Bill/Documents/Dianomic/dev/foglamp-south-sinusoid/python",
+		"/D/Users/Bill/Documents/Dianomic/dev/foglamp-south-sinusoid/python/foglamp",
+		"/D/Users/Bill/Documents/Dianomic/dev/foglamp-south-sinusoid/python/foglamp/plugins",
+		"/D/Users/Bill/Documents/Dianomic/dev/foglamp-south-sinusoid/python/foglamp/plugins/south",
+		"/D/Users/Bill/Documents/Dianomic/dev/foglamp-south-sinusoid/python/foglamp/plugins/south/sinusoid"
+	],
+	"file_history":
+	[
+		"/D/Users/Bill/Downloads/sl1.txt",
+		"/D/Users/Bill/Documents/Dianomic/dev/foglamp-south-sinusoid/python/foglamp/plugins/south/sinusoid/sinusoid.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/foglamp-south-cc2650poll/python/foglamp/plugins/south/cc2650poll/cc2650poll.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/foglamp-south-cc2650poll/python/foglamp/plugins/south/cc2650poll/sensortag_cc2650.py",
+		"/C/Users/Bill/AppData/Roaming/Sublime Text 3/Packages/Pretty JSON/Pretty JSON.sublime-settings",
+		"/C/Users/Bill/AppData/Roaming/Sublime Text 3/Packages/User/Pretty JSON.sublime-settings",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/tests/unit/python/foglamp/plugins/north/http_north/test_http_north.py",
+		"/D/Users/Bill/Downloads/tempmon_20/index.php",
+		"/D/Users/Bill/Documents/Dianomic/rpi kworker hang backtrace 2018-06-15.txt",
+		"/D/Users/Bill/Documents/Dianomic/dev/foglamp-discovery/README.md",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/python/foglamp/plugins/north/omf/omf.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/python/foglamp/services/south/ingest.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/docs/07_admin/02_RESTadmin.rst",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/docs/06_plugins/03_south_plugins.rst",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/docs/05_testing.rst",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/python/foglamp/services/core/server.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/scripts/plugins/storage/sqlite/init.sql",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/scripts/plugins/storage/postgres/init.sql",
+		"/D/Users/Bill/Documents/Dianomic/dev/crap/FogLAMP/extras/scripts/foglamp.service",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/extras/scripts/foglamp.service",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/python/foglamp/plugins/storage/common/lib.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/python/foglamp/plugins/storage/postgres/backup_restore/lib.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/python/foglamp/plugins/north/http_north/http_north.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/python/foglamp/tasks/purge/purge.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/python/foglamp/tasks/north/sending_process.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/python/foglamp/services/core/service_registry/monitor.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/python/foglamp/services/core/scheduler/scheduler.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/python/foglamp/services/core/api/configuration.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/python/foglamp/plugins/north/common/common.py",
+		"/C/Users/Bill/AppData/Roaming/Sublime Text 3/Packages/Anaconda/Anaconda.sublime-settings",
+		"/C/Users/Bill/AppData/Roaming/Sublime Text 3/Packages/User/Anaconda.sublime-settings",
+		"/C/Users/Bill/AppData/Local/Temp/Temp1_Ableton Status Report 2017-10-10 084846 Live 9.7.1.zip/README.txt",
+		"/D/Users/Bill/Documents/Bill Music/Equipment/nativeKontrol/license.txt",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/fogLAMP.sublime-project",
+		"/D/Users/Bill/Documents/Dianomic/dev/storageApi/storageApi.sublime-project",
+		"/C/Users/Bill/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
+		"/C/Users/Bill/AppData/Roaming/Sublime Text 3/Packages/Default/Default (Windows).sublime-keymap",
+		"/D/Users/Bill/Downloads/storage_api/Debug/link.11252-cvtres.write.1.tlog",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/core/api/scheduler.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/admin_api/wsgi.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/admin_api/model.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/tests/device/coap/test_sensor_values.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/tests/core/__init__.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/tests/core/test_scheduler.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/admin_api/app_builder.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/translators/statistics_to_pi.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/translators/omf_translator.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/device/server.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/device/coap/controller.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/device/coap/sensor_values.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/core/api/configuration.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/core/__main__.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/core/middleware.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/core/server_daemon.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/core/server.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/core/scheduler.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp_start.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/coap/uri_handlers/sensor_values.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/coap/server.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/rest_service/app.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/rest_service/model.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/rest_service/util.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/setup.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/requirements_test.txt",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/requirements_doc.txt",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/requirements_dev.txt",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/requirements.txt",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/Makefile",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/healthcheck.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp_daemon.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/__init__.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/tests/coap/uri_handlers/test_sensor_values.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/tests/test_db_config.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/configurator.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/__init__.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/python/foglamp/coap/__init__.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/src/json-schema/ sensor-values.json",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/Jenkinsfile",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/docs/check_sphinx.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/docs/conf.py",
+		"/D/Users/Bill/Documents/Dianomic/dev/FogLAMP/docs/index.rst",
+		"/D/Users/Bill/Documents/Personal/LinkedIn Data 2017-06-25/Rich Media/-1823305293.txt",
+		"/D/Users/Bill/Documents/Personal/LinkedIn Data 2017-06-25/Rich Media/232119664.txt",
+		"/D/Users/Bill/Documents/apps/powerdirector/license.txt",
+		"/D/Users/Bill/Downloads/test.txt",
+		"/D/Users/Bill/Documents/Personal/House Cleaner/House Cleaner Candidates.txt",
+		"/D/Users/Bill/Documents/ScaleDB/dev/shared/mysite/mysite/__init__.py",
+		"/D/Users/Bill/Documents/ScaleDB/dev/shared/test.txt",
+		"/D/Users/Bill/Documents/Personal/bill_card.html",
+		"/D/Users/Bill/Documents/ScaleDB/dev/shared/test2.txt",
+		"/D/Users/Bill/Documents/ScaleDB/dev/tmp/db.log.00000",
+		"/D/Users/Bill/Documents/ScaleDB/dev/tmp/gdbcas10.203.198.226.txt",
+		"/D/Users/Bill/Documents/ScaleDB/dev/scaledb/cengine/slm/incl/slm_constants.h",
+		"/D/Users/Bill/Documents/ScaleDB/dev/scaledb/tests/qa/bin/smoke_test.pl",
+		"/D/Users/Bill/Documents/ScaleDB/dev/scaledb/tests/qa/bin/cdr_test_smoke.pl",
+		"/D/Users/Bill/Documents/ScaleDB/dev/scaledb/tests/qa/bin/trun.py",
+		"/D/Users/Bill/Documents/ScaleDB/OSI Event Frame queries.sql",
+		"/D/Users/Bill/Downloads/test_output.xml",
+		"/D/Users/Bill/Documents/ScaleDB/dev/scaledb/cengine/cluster/impl/basic_tcpip_common.cpp",
+		"/D/Users/Bill/Documents/ScaleDB/dev/scaledb/tests/qa/bin/ddl_2nodes.pl",
+		"/C/Users/Bill/.ssh/jenkinskey.pem",
+		"/C/Users/Bill/.ssh/id_rsa.pub",
+		"/D/Users/Bill/VirtualBox VMs/tau Clone/tau Clone.vbox",
+		"/C/Users/Public/Documents/dgc.txt",
+		"/C/Users/Bill/AppData/Roaming/Sublime Text 3/Packages/TSQLEasy/Default (Windows).sublime-keymap",
+		"/C/Users/Bill/AppData/Roaming/Sublime Text 3/Packages/TSQLEasy/TSQLEasy.sublime-settings",
+		"/D/Users/Bill/Documents/ScaleDB/OSI Event Frame queries.mdf",
+		"/D/Users/Bill/Documents/ScaleDB/OSI Event Frame queries.t-sql",
+		"/C/Users/Bill/AppData/Roaming/Sublime Text 3/Packages/TSQLEasy/README.md",
+		"/D/Users/Bill/Documents/ScaleDB/OSI Event Frame queries.tsql",
+		"/D/Users/Bill/Documents/ScaleDB/OSI Event Frame queries",
+		"/C/Users/Bill/AppData/Roaming/Sublime Text 3/Packages/Origami/Default (Windows).sublime-keymap",
+		"/C/Users/Bill/AppData/Roaming/Sublime Text 3/Packages/Origami/Origami.sublime-settings",
+		"/C/Users/Bill/AppData/Roaming/Sublime Text 3/Packages/User/Origami.sublime-settings",
+		"/C/Users/Bill/AppData/Roaming/Sublime Text 3/Packages/BracketHighlighter/bh_core.sublime-settings",
+		"/D/Users/Bill/Documents/ScaleDB/dev/scaledb/tests/qa/qadata/drops/etctemplate/cas.cnf",
+		"/C/Users/Bill/.ssh/config",
+		"/D/Users/Bill/Downloads/cas_log.sql",
+		"/D/Users/Bill/Documents/ScaleDB/dev/scaledb/cengine/manager/impl/sdb_manager.cpp",
+		"/D/Users/Bill/Documents/ScaleDB/dev/scaledb/cengine/storage/impl/sdb_file_type.cpp",
+		"/D/Users/Bill/Documents/ScaleDB/dev/scaledb/cengine/storage/impl/basic_io.cpp",
+		"/D/Users/Bill/Documents/ScaleDB/dev/scaledb/cengine/engine_util/incl/data_util.h",
+		"/D/Users/Bill/Documents/Bill Music/Equipment/Melodyne/Melodyne.3.2.2.2.billehunt/serialnumber.txt",
+		"/D/Users/Bill/Documents/Bill Music/Equipment/Melodyne/Melodyne.4.0.4.001.billehunt/Celemony.license",
+		"/D/Users/Bill/Documents/ScaleDB/dev/scaledb/readme.txt",
+		"/D/Users/Bill/Downloads/SoftStepEditors_Win_2.02 (1)/SoftStepEditors_Win_2.02/SoftStepAdvancedEditor/presets/settings.json",
+		"/C/Users/Bill/AppData/Local/Temp/Temp1_SoftStepEditors_Win_2.02 (1).zip/SoftStepEditors_Win_2.02/Extras/SoftStep_Live_Script_2.01/Script instructions.txt",
+		"/D/Users/Bill/Documents/Bill Music/Equipment/Midi Translator/1.7.1 License.txt"
+	],
+	"find":
+	{
+		"height": 62.0
+	},
+	"find_in_files":
+	{
+		"height": 178.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"'",
+			"generate_data",
+			"index",
+			"start",
+			"index",
+			"#012",
+			"\"",
+			"\\\"",
+			"data_to_send",
+			"dataPointsPerSec"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "python/foglamp/plugins/south/sinusoid/sinusoid.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4715,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3479,
+								3479
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": ".",
+									"selector": "source.python - string - comment - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								}
+							],
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 164.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 62.0
+	},
+	"input":
+	{
+		"height": 62.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 118.0
+	},
+	"pinned_build_system": "",
+	"project": "foglamp-south-sinusoid.sublime-project",
+	"replace":
+	{
+		"height": 120.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"init.sql",
+				"scripts\\plugins\\storage\\sqlite\\init.sql"
+			],
+			[
+				"lib.py",
+				"python\\foglamp\\plugins\\storage\\common\\lib.py"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 222.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
