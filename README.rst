@@ -1,15 +1,15 @@
 ======================
-foglamp-south-random
+foglamp-south-randomwalk
 ======================
 
-FogLAMP South Plugin for random. `read more <https://github.com/foglamp/foglamp-south-random/blob/master/python/foglamp/plugins/south/random/readme.rst>`_
+FogLAMP South Plugin for randomwalk. `read more <https://github.com/foglamp/foglamp-south-randomwalk/blob/master/python/foglamp/plugins/south/randomwalk/readme.rst>`_
 
 
 ***********************
-Packaging for random
+Packaging for randomwalk
 ***********************
 
-This repo contains the scripts used to create a foglamp-south-random package.
+This repo contains the scripts used to create a foglamp-south-randomwalk package.
 
 The make_deb script
 ===================
@@ -18,7 +18,7 @@ The make_deb script
 
   $ ./make_deb help
   make_deb help [clean|cleanall]
-  This script is used to create the Debian package of foglamp south random
+  This script is used to create the Debian package of foglamp south randomwalk
   Arguments:
    help     - Display this help text
    clean    - Remove all the old versions saved in format .XXXX
@@ -35,14 +35,14 @@ Finally, run the ``make_deb`` command:
 .. code-block:: console
 
     $ ./make_deb
-    The package root directory is         : /home/pi/foglamp-south-random
-    The FogLAMP south random version is : 1.0.0
-    The package will be built in          : /home/pi/foglamp-south-random/packages/build
-    The package name is                   : foglamp-south-random-1.0.0
+    The package root directory is         : /home/pi/foglamp-south-randomwalk
+    The FogLAMP south randomwalk version is : 1.0.0
+    The package will be built in          : /home/pi/foglamp-south-randomwalk/packages/build
+    The package name is                   : foglamp-south-randomwalk-1.0.0
 
     Populating the package and updating version file...Done.
     Building the new package...
-    dpkg-deb: building package 'foglamp-south-random' in 'foglamp-south-random-1.0.0.deb'.
+    dpkg-deb: building package 'foglamp-south-randomwalk' in 'foglamp-south-randomwalk-1.0.0.deb'.
     Building Complete.
     $
 
@@ -53,8 +53,8 @@ The result will be:
 
   $ ls -l packages/build/
     total 12
-    drwxr-xr-x 4 pi pi 4096 Jun 14 10:03 foglamp-south-random-1.0.0
-    -rw-r--r-- 1 pi pi 4522 Jun 14 10:03 foglamp-south-random-1.0.0.deb
+    drwxr-xr-x 4 pi pi 4096 Jun 14 10:03 foglamp-south-randomwalk-1.0.0
+    -rw-r--r-- 1 pi pi 4522 Jun 14 10:03 foglamp-south-randomwalk-1.0.0.deb
   $
 
 
@@ -63,26 +63,26 @@ If you execute the ``make_deb`` command again, you will see:
 .. code-block:: console
 
     $ ./make_deb
-    The package root directory is         : /home/pi/foglamp-south-random
-    The FogLAMP south random version is : 1.0.0
-    The package will be built in          : /home/pi/foglamp-south-random/packages/build
-    The package name is                   : foglamp-south-random-1.0.0
+    The package root directory is         : /home/pi/foglamp-south-randomwalk
+    The FogLAMP south randomwalk version is : 1.0.0
+    The package will be built in          : /home/pi/foglamp-south-randomwalk/packages/build
+    The package name is                   : foglamp-south-randomwalk-1.0.0
 
-    Saving the old working environment as foglamp-south-random-1.0.0.0001
+    Saving the old working environment as foglamp-south-randomwalk-1.0.0.0001
     Populating the package and updating version file...Done.
-    Saving the old package as foglamp-south-random-1.0.0.deb.0001
+    Saving the old package as foglamp-south-randomwalk-1.0.0.deb.0001
     Building the new package...
-    dpkg-deb: building package 'foglamp-south-random' in 'foglamp-south-random-1.0.0.deb'.
+    dpkg-deb: building package 'foglamp-south-randomwalk' in 'foglamp-south-randomwalk-1.0.0.deb'.
     Building Complete.
     $
 
 
     $ ls -l packages/build/
     total 24
-    drwxr-xr-x 4 pi pi 4096 Jun 14 10:06 foglamp-south-random-1.0.0
-    drwxr-xr-x 4 pi pi 4096 Jun 14 10:03 foglamp-south-random-1.0.0.0001
-    -rw-r--r-- 1 pi pi 4518 Jun 14 10:06 foglamp-south-random-1.0.0.deb
-    -rw-r--r-- 1 pi pi 4522 Jun 14 10:03 foglamp-south-random-1.0.0.deb.0001
+    drwxr-xr-x 4 pi pi 4096 Jun 14 10:06 foglamp-south-randomwalk-1.0.0
+    drwxr-xr-x 4 pi pi 4096 Jun 14 10:03 foglamp-south-randomwalk-1.0.0.0001
+    -rw-r--r-- 1 pi pi 4518 Jun 14 10:06 foglamp-south-randomwalk-1.0.0.deb
+    -rw-r--r-- 1 pi pi 4522 Jun 14 10:03 foglamp-south-randomwalk-1.0.0.deb.0001
     $
 
 ... where the previous build is now marked with the suffix *.0001*.

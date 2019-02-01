@@ -7,28 +7,28 @@
 from unittest.mock import patch
 import pytest
 
-from python.foglamp.plugins.south.random import random
+from python.foglamp.plugins.south.randomwalk import randomwalk
 
 __author__ = "Bill Hunt"
 __copyright__ = "Copyright (c) 2019 Dianomic Systems"
 __license__ = "Apache 2.0"
 __version__ = "${VERSION}"
 
-config = random._DEFAULT_CONFIG
+config = randomwalk._DEFAULT_CONFIG
 
 
 def test_plugin_contract():
     # Evaluates if the plugin has all the required methods
-    assert callable(getattr(random, 'plugin_info'))
-    assert callable(getattr(random, 'plugin_init'))
-    assert callable(getattr(random, 'plugin_poll'))
-    assert callable(getattr(random, 'plugin_shutdown'))
-    assert callable(getattr(random, 'plugin_reconfigure'))
+    assert callable(getattr(randomwalk, 'plugin_info'))
+    assert callable(getattr(randomwalk, 'plugin_init'))
+    assert callable(getattr(randomwalk, 'plugin_poll'))
+    assert callable(getattr(randomwalk, 'plugin_shutdown'))
+    assert callable(getattr(randomwalk, 'plugin_reconfigure'))
 
 
 def test_plugin_info():
-    assert random.plugin_info() == {
-        'name': 'Random Poll plugin',
+    assert randomwalk.plugin_info() == {
+        'name': 'RandomWalk Poll plugin',
         'version': '2.0.0',
         'mode': 'poll',
         'type': 'south',
@@ -38,7 +38,7 @@ def test_plugin_info():
 
 
 def test_plugin_init():
-    assert random.plugin_init(config) == config
+    assert randomwalk.plugin_init(config) == config
 
 
 @pytest.mark.skip(reason="To be implemented")
@@ -52,6 +52,6 @@ def test_plugin_reconfigure():
 
 
 def test_plugin_shutdown():
-    with patch.object(random._LOGGER, 'info') as patch_logger_info:
-        random.plugin_shutdown(config)
-    patch_logger_info.assert_called_once_with('random plugin shut down.')
+    with patch.object(randomwalk._LOGGER, 'info') as patch_logger_info:
+        randomwalk.plugin_shutdown(config)
+    patch_logger_info.assert_called_once_with('randomwalk plugin shut down.')

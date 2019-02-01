@@ -28,8 +28,8 @@
 set -e
 
 set_files_ownership () {
-    chown -R root:root /usr/local/foglamp/python/foglamp/plugins/south/random
+    chown -R root:root /usr/local/foglamp/python/foglamp/plugins/south/randomwalk
 }
 
 set_files_ownership
-echo "Random plugin is installed."
+echo "RandomWalk plugin is installed."

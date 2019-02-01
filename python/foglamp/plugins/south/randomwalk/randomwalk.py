@@ -10,11 +10,11 @@ import copy
 import uuid
 import logging
 
-from random import randint
-
 from foglamp.common import logger
 from foglamp.plugins.common import utils
 from foglamp.services.south import exceptions
+
+from random import randint
 
 __author__ = "Bill Hunt"
 __copyright__ = "Copyright (c) 2019 Dianomic Systems"
