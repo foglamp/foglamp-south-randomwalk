@@ -29,7 +29,7 @@ def test_plugin_contract():
 def test_plugin_info():
     assert randomwalk.plugin_info() == {
         'name': 'RandomWalk Poll plugin',
-        'version': '2.0.0',
+        'version': '1.5.0',
         'mode': 'poll',
         'type': 'south',
         'interface': '1.0',
@@ -38,7 +38,11 @@ def test_plugin_info():
 
 
 def test_plugin_init():
-    assert randomwalk.plugin_init(config) == config
+    expected_config = randomwalk.plugin_init(config)
+    expected_config['lastValue'] = None
+    actual_config = config
+    actual_config['lastValue'] = None
+    assert expected_config == actual_config
 
 
 @pytest.mark.skip(reason="To be implemented")
