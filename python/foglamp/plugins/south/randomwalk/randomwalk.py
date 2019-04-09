@@ -12,7 +12,6 @@ import logging
 
 from foglamp.common import logger
 from foglamp.plugins.common import utils
-from foglamp.services.south import exceptions
 
 from random import randint
 
@@ -94,7 +93,7 @@ def plugin_poll(handle):
         returns a sensor reading in a JSON document, as a Python dict, if it is available
         None - If no reading is available
     Raises:
-        TimeoutError
+        Exception
     """
     try:
         if handle['lastValue'] is None:
@@ -119,7 +118,7 @@ def plugin_poll(handle):
 
     except (Exception, RuntimeError) as ex:
         _LOGGER.exception("RandomWalk exception: {}".format(str(ex)))
-        raise exceptions.DataRetrievalError(ex)
+        raise ex
     else:
         return data
 
