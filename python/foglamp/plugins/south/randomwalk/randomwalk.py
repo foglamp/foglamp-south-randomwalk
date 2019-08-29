@@ -99,10 +99,11 @@ def plugin_poll(handle):
         if handle['lastValue'] is None:
             new = randint(int(handle['minValue']['value']), int(handle['maxValue']['value']))
         else:
-            while True:
-                new = handle['lastValue'] + randint(-1, 1)
-                if new > int(handle['minValue']['value']) and new < int(handle['maxValue']['value']):
-                    break
+            new = handle['lastValue'] + randint(-1, 1)
+            if new > int(handle['maxValue']['value']):
+                new = int(handle['maxValue']['value'])
+            elif new < int(handle['minValue']['value']):
+                new = int(handle['minValue']['value'])
 
         time_stamp = utils.local_timestamp()
         data = {
@@ -135,6 +136,10 @@ def plugin_reconfigure(handle, new_config):
     _LOGGER.info("Old config for randomwalk plugin {} \n new config {}".format(handle, new_config))
     new_handle = copy.deepcopy(new_config)
     new_handle['lastValue'] = handle['lastValue']
+    if int(new_handle['maxValue']['value']) < int(new_handle['maxValue']['value']):
+        tmp = new_handle['minValue']
+        new_handle['minValue'] = new_handle['maxValue']
+        new_handle['minValue'] = tmp
     return new_handle
 
 
