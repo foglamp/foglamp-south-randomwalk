@@ -1,5 +1,5 @@
 ========================
-foglamp-south-randomwalk
+fledge-south-randomwalk
 ========================
 
-FogLAMP South Plugin for randomwalk. `read more <https://github.com/foglamp/foglamp-south-randomwalk/blob/master/python/foglamp/plugins/south/randomwalk/readme.rst>`_
+Fledge South Plugin for randomwalk. `read more <https://github.com/fledge/fledge-south-randomwalk/blob/master/python/fledge/plugins/south/randomwalk/readme.rst>`_
